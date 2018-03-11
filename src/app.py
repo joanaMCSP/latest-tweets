@@ -39,7 +39,10 @@ def activity():
         tweet_with_latest_retweet = {}
         for tweet in activity:
             #returns most recent retweets of the tweet specified by the id parameter
-            latest_retweets = api.retweets(tweet['id'], 1)
+            try:
+                latest_retweets = api.retweets(tweet['id'], 1)
+            except TweepError as e:
+                print('Failed to get data. Status code: ', e.message[0]['code'])
             if(latest_retweets):
                 created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(latest_retweets[0]['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
                 tweet_with_latest_retweet[created_at] = tweet
@@ -53,7 +56,10 @@ def get_latest():
     key = 'trump_latest'
     latest = load_from_cache(key)
     if latest is None :
-        latest = api.user_timeline(screen_name = config.USERNAME, count = config.NUMBER_OF_TWEETS)
+        try:
+            latest = api.user_timeline(screen_name = config.USERNAME, count = config.NUMBER_OF_TWEETS)
+        except TweepError as e:
+            print('Failed to get data. Status code: ', e.message[0]['code'])
         add_to_cache(key, latest)
     return latest
 
