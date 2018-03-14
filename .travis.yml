@@ -1,15 +1,11 @@
 language: python
 python:
-  - 3.6
-
+- 3.6
 services:
-  - docker
-
+- docker
 install:
-  - docker-compose up
-
+- docker-compose up -d
 before_script:
-  - pip install requests
-
+- pip install requests
 script:
-  - pytest
+- python tests/tests.py

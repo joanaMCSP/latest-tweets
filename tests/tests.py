@@ -3,10 +3,11 @@ import requests
 import json
 import time
 
+
 class ApiTest(unittest.TestCase):
     def setUp(self):
-        self.url = "http://127.0.0.1:5000/"
-        self.main_path = "trump"
+        self.url = "http://127.0.0.1:5000"
+        self.main_path = "/trump"
         self.popularity_path = self.main_path + "/popularity"
         self.activity_path = self.main_path + "/activity"
 
