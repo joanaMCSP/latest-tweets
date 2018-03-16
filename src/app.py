@@ -16,11 +16,16 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 
 @app.route('/trump', methods=["GET"])
 def latest():
+    """"
+    get 100 latest tweets
+    """
     return json.dumps(get_latest())
 
-#get latest ordered by number of likes
 @app.route('/trump/popularity', methods=["GET"])
 def popularity():
+    """"
+    get 100 latest tweets ordered by number of likes
+    """
     key = 'trump_popularity'
     latest = load_from_cache(key)
     if latest is None :
@@ -29,14 +34,16 @@ def popularity():
         add_to_cache(key, latest)
     return json.dumps(latest)
 
-#get latest with most recent retweet
 @app.route('/trump/activity', methods=["GET"])
 def activity():
+    """"
+    get 5 with most recent retweet from 100 latest tweets
+    """
     key = 'trump_activity'
     activity = load_from_cache(key)
     if activity is None:
         activity = get_latest()[:5]
-        tweet_with_latest_retweet = {}
+        last_retweeted = {}
         for tweet in activity:
             #returns most recent retweets of the tweet specified by the id parameter
             try:
@@ -45,10 +52,10 @@ def activity():
                 print('Failed to get data. Status code: ', e.message[0]['code'])
             if(latest_retweets):
                 created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(latest_retweets[0]['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
-                tweet_with_latest_retweet[created_at] = tweet
-        latest = [key for key in tweet_with_latest_retweet]
-        latest.sort(reverse=True)
-        activity = [tweet_with_latest_retweet[tweet] for tweet in latest]
+                last_retweeted[created_at] = tweet
+                
+        latest = [key for key in last_retweeted].sort(reverse=True)
+        activity = [last_retweeted[tweet] for tweet in latest]
         add_to_cache(key, activity)
     return json.dumps(activity)
 

@@ -9,6 +9,18 @@ Small Python service using Flask and Redis to get a user's latest 100 tweets. It
 
 Redis is used to cache the results obtained from Twitter's API for an hour. Both services run in Docker containers.
 
+## Set up
+
+Upon starting the service the config file will look for the following values
+which are specified as environment variables for the container in the docker-compose.yml:
+
+* CONSUMER_KEY
+* CONSUMER_SECRET
+* ACCESS_TOKEN_KEY
+* ACCESS_TOKEN_SECRET
+
+You can get these values from http://dev.twitter.com by creating a twitter account and application and going to the API Keys tab.
+
 ## Running
 
 - install docker-compose
@@ -18,17 +30,15 @@ Redis is used to cache the results obtained from Twitter's API for an hour. Both
     $docker-compose up    
     ```
 
-To interact with the service go to http://localhost:5000/trump, http://localhost:5000/trump/popularity    
-or http://localhost:5000/trump/activity or use curl alternatively.
+Go to http://localhost:5000/trump, http://localhost:5000/trump/popularity    
+or http://localhost:5000/trump/activity through your browser or use curl alternatively.
 
 ## Testing
 
-This repository is integrated with Travis CI to run the API tests everytime code is pushed, but the tests can also be run
-entering the following commands:
-    
+This repository is integrated with Travis CI to run the API tests everytime code is pushed, but the tests can also be run by entering the following commands:
+
    ```
     $docker-compose up    
     $python tests/tests.py   
-    
+
    ```
-    
