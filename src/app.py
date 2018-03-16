@@ -47,14 +47,14 @@ def activity():
         for tweet in activity:
             #returns most recent retweets of the tweet specified by the id parameter
             try:
-                latest_retweets = api.retweets(tweet['id'], 1)
+                recent_retweets = api.retweets(tweet['id'], 1)
             except TweepError as e:
                 print('Failed to get data. Status code: ', e.message[0]['code'])
-            if(latest_retweets):
-                created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(latest_retweets[0]['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
-                last_retweeted[created_at] = tweet
-                
-        latest = [key for key in last_retweeted].sort(reverse=True)
+                return []
+            created_at = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(recent_retweets[0]['created_at'],'%a %b %d %H:%M:%S +0000 %Y'))
+            last_retweeted[created_at] = tweet
+        latest = [key for key in last_retweeted]
+        latest.sort(reverse=True)
         activity = [last_retweeted[tweet] for tweet in latest]
         add_to_cache(key, activity)
     return json.dumps(activity)
@@ -67,8 +67,11 @@ def get_latest():
             latest = api.user_timeline(screen_name = config.USERNAME, count = config.NUMBER_OF_TWEETS)
         except TweepError as e:
             print('Failed to get data. Status code: ', e.message[0]['code'])
-        add_to_cache(key, latest)
+            return []
+    add_to_cache(key, latest)
     return latest
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=config.DEBUG)
