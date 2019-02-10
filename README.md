@@ -1,4 +1,4 @@
-# latest_tweets
+# latest-tweets
 [![Build Status](https://travis-ci.org/joanaMCSP/latest_tweets.svg?branch=master)](https://travis-ci.org/joanaMCSP/latest_tweets)
 
 Small Python service using Flask and Redis to get a user's latest 100 tweets. It exposes the following endpoints:
